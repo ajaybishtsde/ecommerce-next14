@@ -1,13 +1,35 @@
 "use client";
 import { saveUser } from "@/util/userActions";
 import { FormEvent, useState } from "react";
+import { useFormStatus } from "react-dom";
+import swal from "sweetalert";
 
 const LeftPanel = () => {
   const [loginView, setLoginView] = useState(true);
   async function handleSubmit(formData: FormData) {
-    console.log("formData", formData.get("name"));
-    const result = await saveUser(formData);
+    try {
+      const result = await saveUser(formData);
+      if (result?.status) {
+        swal("User is registerd succesfully");
+      }
+    } catch (error) {
+      console.error("error", error);
+    }
   }
+  const SignUpButton = () => {
+    const { pending } = useFormStatus();
+    return (
+      <>
+        {!pending ? (
+          <button className="mb-4 w-2/4 h-10 bg-blue-500 hover:scale-105 text-white rounded-md ">
+            Sign up
+          </button>
+        ) : (
+          <div className="h-10 w-10 border-solid border-t-blue-300 border-2 rounded-3xl animate-spin"></div>
+        )}
+      </>
+    );
+  };
   return (
     <>
       <div className="w-full h-full ">
@@ -85,9 +107,7 @@ const LeftPanel = () => {
               placeholder="password"
               className="mb-4 ps-2 w-full h-10 focus-within:outline-gray-200 hover:scale-105 rounded-md"
             />
-            <button className="mb-4 w-2/4 h-10 bg-blue-500 hover:scale-105 text-white rounded-md ">
-              Sign up
-            </button>
+            <SignUpButton />
           </form>
         )}
       </div>
