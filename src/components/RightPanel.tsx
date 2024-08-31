@@ -1,5 +1,6 @@
 "use client";
 import { addUserRole, removeUser } from "@/util/userActions";
+import Link from "next/link";
 import { Suspense, use } from "react";
 
 interface Users {
@@ -21,6 +22,7 @@ const saveRole = async (
 };
 const deleteUser = async (email: string) => {
   const result = await removeUser(email);
+  console.log("result>>>>>>>>>>", result);
   if (result?.status) {
     swal("user removed from db");
   }
@@ -33,6 +35,7 @@ const RightPanel = ({ users }: Users[] | any) => {
         {users.map((item: Users, i: number) => {
           return (
             <div className="w-96 h-28 bg-blue-200 " key={i}>
+              <Link href={"/dashboard"}>Go to dashboard</Link>
               <div className="w-96 h-20 p-2 flex">
                 <ul className="w-full h-full">
                   <li className="text-red-400">
@@ -60,7 +63,7 @@ const RightPanel = ({ users }: Users[] | any) => {
                   id=""
                   className="me-4"
                   value="editor"
-                  checked={item.role && item.role.name==='editor'}
+                  checked={item.role && item.role.name === "editor"}
                   onChange={(e) => {
                     saveRole(item.email, e);
                   }}
@@ -71,7 +74,7 @@ const RightPanel = ({ users }: Users[] | any) => {
                   name={`${item.email}-role`}
                   id=""
                   value="reviewer"
-                  checked={item.role && item.role?.name==='reviewer'}
+                  checked={item.role && item.role?.name === "reviewer"}
                   onChange={(e) => {
                     saveRole(item.email, e);
                   }}

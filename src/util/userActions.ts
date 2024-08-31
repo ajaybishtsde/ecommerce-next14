@@ -61,6 +61,7 @@ export const fetchUsers = async () => {
 };
 // remove user
 export const removeUser = async (email:string) => {
+  revalidatePath("/");
   await prisma.$connect();
   try {
     const deleteUser = await prisma.user.deleteMany({
@@ -80,7 +81,7 @@ export const removeUser = async (email:string) => {
       error: error,
     };
   }
-  revalidatePath("/");
+ 
 };
 // add user role
 export const addUserRole = async (role: string, email: string) => {

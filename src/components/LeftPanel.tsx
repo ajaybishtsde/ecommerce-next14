@@ -1,11 +1,12 @@
 "use client";
 import { saveUser } from "@/util/userActions";
-import { FormEvent, useState } from "react";
+import { FormEvent, useRef, useState } from "react";
 import { useFormStatus } from "react-dom";
 import swal from "sweetalert";
 
 const LeftPanel = () => {
   const [loginView, setLoginView] = useState(true);
+  const ref=useRef<HTMLFormElement>(null)
   async function handleSubmit(formData: FormData) {
     try {
       const result = await saveUser(formData);
@@ -84,8 +85,12 @@ const LeftPanel = () => {
             </button>
           </form>
         ) : (
-          <form
-            action={handleSubmit}
+        <form
+          ref={ref}
+            action={async formData=>{
+              ref.current && ref?.current.reset()
+              saveUser(formData)
+            }}
             className="w-full pe-6 ps-6 h-2/4 flex justify-center items-center flex-col"
           >
             <input
