@@ -6,17 +6,8 @@ import swal from "sweetalert";
 
 const LeftPanel = () => {
   const [loginView, setLoginView] = useState(true);
-  const ref=useRef<HTMLFormElement>(null)
-  async function handleSubmit(formData: FormData) {
-    try {
-      const result = await saveUser(formData);
-      if (result?.status) {
-        swal("User is registerd succesfully");
-      }
-    } catch (error) {
-      console.error("error", error);
-    }
-  }
+  const ref = useRef<HTMLFormElement>(null);
+
   const SignUpButton = () => {
     const { pending } = useFormStatus();
     return (
@@ -85,11 +76,11 @@ const LeftPanel = () => {
             </button>
           </form>
         ) : (
-        <form
-          ref={ref}
-            action={async formData=>{
-              ref.current && ref?.current.reset()
-              saveUser(formData)
+          <form
+            ref={ref}
+            action={async (formData) => {
+              ref.current && ref?.current.reset();
+              saveUser(formData);
             }}
             className="w-full pe-6 ps-6 h-2/4 flex justify-center items-center flex-col"
           >

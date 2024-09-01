@@ -22,7 +22,6 @@ const saveRole = async (
 };
 const deleteUser = async (email: string) => {
   const result = await removeUser(email);
-  console.log("result>>>>>>>>>>", result);
   if (result?.status) {
     swal("user removed from db");
   }

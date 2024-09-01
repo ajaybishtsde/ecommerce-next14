@@ -41,11 +41,11 @@ export const fetchUsers = async () => {
   await prisma.$connect();
   try {
     const users = await prisma.user.findMany({
-      select:{
-        name:true,
-        email:true,
-        role:true
-      }
+      select: {
+        name: true,
+        email: true,
+        role: true,
+      },
     });
     return {
       status: true,
@@ -60,14 +60,13 @@ export const fetchUsers = async () => {
   }
 };
 // remove user
-export const removeUser = async (email:string) => {
+export const removeUser = async (email: string) => {
   revalidatePath("/");
   await prisma.$connect();
   try {
     const deleteUser = await prisma.user.deleteMany({
-      where: { email: email },
+      where: { email },
     });
-    console.log("deleteUser", deleteUser);
     if (deleteUser) {
       return {
         status: true,
@@ -81,11 +80,10 @@ export const removeUser = async (email:string) => {
       error: error,
     };
   }
- 
 };
 // add user role
 export const addUserRole = async (role: string, email: string) => {
-  revalidatePath('/')
+  revalidatePath("/");
   await prisma.$connect();
   if (!email || !role) {
     return {
@@ -99,7 +97,6 @@ export const addUserRole = async (role: string, email: string) => {
         userEmail: email,
       },
     });
-    console.log("user",user,"email",email)
     let result;
     if (user) {
       result = await prisma.role.update({
