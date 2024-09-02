@@ -1,26 +1,43 @@
 "use client";
-import { saveUser } from "@/util/userActions";
+import { handleAuth, saveUser } from "@/util/userActions";
+import { signIn, useSession } from "next-auth/react";
 import { FormEvent, useRef, useState } from "react";
 import { useFormStatus } from "react-dom";
-import swal from "sweetalert";
 
 const LeftPanel = () => {
+  const { data: session } = useSession();
   const [loginView, setLoginView] = useState(true);
   const ref = useRef<HTMLFormElement>(null);
 
-  const SignUpButton = () => {
+  const SignUpButton = ({ buttonText }: { buttonText: string }) => {
     const { pending } = useFormStatus();
     return (
       <>
         {!pending ? (
-          <button className="mb-4 w-2/4 h-10 bg-blue-500 hover:scale-105 text-white rounded-md ">
-            Sign up
+          <button
+            disabled={session ? true : false}
+            className="mb-4 w-2/4 h-10 bg-blue-500 hover:scale-105 text-white rounded-md "
+          >
+            {buttonText}
           </button>
         ) : (
           <div className="h-10 w-10 border-solid border-t-blue-300 border-2 rounded-3xl animate-spin"></div>
         )}
       </>
     );
+  };
+  const handleSignin = async (formData: FormData) => {
+    console.log("formdata", formData.get("email"), formData.get("password"));
+    try {
+      const response = await signIn("credentials", {
+        redirect: true,
+        email: formData.get("email"),
+        password: formData.get("password"),
+      });
+      console.log("res", response);
+    } catch (error) {
+      console.log("error", error);
+    }
   };
   return (
     <>
@@ -53,27 +70,24 @@ const LeftPanel = () => {
 
         {loginView ? (
           <form
-            action=""
+            action={(formData) => {
+              handleSignin(formData);
+            }}
             className="w-full pe-6 ps-6 h-1/4 mt-8 flex justify-center items-center flex-col"
           >
             <input
               type="email"
-              name=""
+              name="email"
               placeholder="username / email"
               className="mb-4 ps-2 w-full h-10 focus-within:outline-gray-200 hover:scale-105 rounded-md"
             />
             <input
               type="password"
-              name=""
+              name="password"
               placeholder="password"
               className="mb-4 ps-2 w-full h-10 focus-within:outline-gray-200 hover:scale-105 rounded-md"
             />
-            <button
-              type="submit"
-              className="mb-4 w-2/4 h-10 bg-blue-500 hover:text-blue-900 hover:bg-white text-white rounded-md "
-            >
-              Sign in
-            </button>
+            <SignUpButton buttonText={"Sign In"} />
           </form>
         ) : (
           <form
@@ -103,7 +117,7 @@ const LeftPanel = () => {
               placeholder="password"
               className="mb-4 ps-2 w-full h-10 focus-within:outline-gray-200 hover:scale-105 rounded-md"
             />
-            <SignUpButton />
+            <SignUpButton buttonText={"Sign Up"} />
           </form>
         )}
       </div>

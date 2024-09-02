@@ -124,3 +124,36 @@ export const addUserRole = async (role: string, email: string) => {
     };
   }
 };
+// auth
+export const handleAuth = async (credentials: any) => {
+  await prisma.$connect();
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        email: credentials.email,
+        password: credentials.password,
+      },
+      select: {
+        email: true,
+        name: true,
+      },
+    });
+    console.log("credssss", user);
+    if (!user) {
+      return {
+        status: false,
+        message: "Email or Password does not match",
+      };
+    }
+    return {
+      status: true,
+      message: "successfully logged in",
+    };
+  } catch (error) {
+    console.log("error", error);
+    return {
+      status: false,
+      error,
+    };
+  }
+};

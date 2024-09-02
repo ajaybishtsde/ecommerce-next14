@@ -1,7 +1,6 @@
 "use client";
 import { addUserRole, removeUser } from "@/util/userActions";
 import Link from "next/link";
-import { Suspense, use } from "react";
 
 interface Users {
   name: string;
@@ -17,13 +16,13 @@ const saveRole = async (
 ) => {
   const result = await addUserRole(e.target.value, email);
   if (result?.status) {
-    swal("Role updated ");
+    alert("Role updated ");
   }
 };
 const deleteUser = async (email: string) => {
   const result = await removeUser(email);
   if (result?.status) {
-    swal("user removed from db");
+    alert("user removed from db");
   }
 };
 const RightPanel = ({ users }: Users[] | any) => {
