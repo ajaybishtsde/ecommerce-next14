@@ -1,9 +1,11 @@
 "use client";
 import { addProductToDB } from "@/util/productActions";
+import { useSession } from "next-auth/react";
 import React, { useRef } from "react";
 import { useFormStatus } from "react-dom";
 
 const AddProduct = () => {
+  const { data: session } = useSession();
   const SubmitButton = () => {
     const { pending } = useFormStatus();
     return (
@@ -11,7 +13,11 @@ const AddProduct = () => {
         {!pending ? (
           <button
             type="submit"
-            className="mb-4 w-1/4 h-10 bg-blue-500 hover:text-blue-900 hover:bg-white text-white rounded-md "
+            disabled={session?.user.role !== "editor"}
+            className={`mb-4 w-1/4 h-10 bg-blue-500 ${
+              session?.user.role === "editor" &&
+              "hover:text-blue-900 hover:bg-white cursor-pointer"
+            } text-white rounded-md`}
           >
             Add
           </button>

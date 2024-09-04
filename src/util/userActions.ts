@@ -136,6 +136,7 @@ export const handleAuth = async (credentials: any) => {
       select: {
         email: true,
         name: true,
+        role: true,
       },
     });
     console.log("credssss", user);
@@ -147,7 +148,7 @@ export const handleAuth = async (credentials: any) => {
     }
     return {
       status: true,
-      message: "successfully logged in",
+      data: user,
     };
   } catch (error) {
     console.log("error", error);

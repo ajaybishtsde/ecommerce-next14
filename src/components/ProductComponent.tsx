@@ -1,5 +1,6 @@
 "use client";
 import { updateProduct } from "@/util/productActions";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import React from "react";
 interface ProductsList {
@@ -21,6 +22,7 @@ const handelProductStatus = async (
 };
 
 const ProductComponent = ({ products }: { products: ProductsList[] }) => {
+  const { data: session } = useSession();
   return (
     <>
       <div className="grid grid-cols-12 gap-4">
@@ -39,6 +41,7 @@ const ProductComponent = ({ products }: { products: ProductsList[] }) => {
                     value={item.status}
                     checked={item.status === "approved"}
                     className="self-start w-5 h-5"
+                    disabled={session?.user.role !== "reviewer"}
                     onChange={(e) => {
                       handelProductStatus(e, item.name);
                     }}

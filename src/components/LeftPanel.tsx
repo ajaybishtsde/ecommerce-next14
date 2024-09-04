@@ -15,7 +15,7 @@ const LeftPanel = () => {
       <>
         {!pending ? (
           <button
-            disabled={session ? true : false}
+            // disabled={session ? true : false}
             className="mb-4 w-2/4 h-10 bg-blue-500 hover:scale-105 text-white rounded-md "
           >
             {buttonText}
@@ -34,7 +34,6 @@ const LeftPanel = () => {
         email: formData.get("email"),
         password: formData.get("password"),
       });
-      console.log("res", response);
     } catch (error) {
       console.log("error", error);
     }

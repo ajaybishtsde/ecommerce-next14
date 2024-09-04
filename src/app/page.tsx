@@ -2,15 +2,14 @@ import LeftPanel from "@/components/LeftPanel";
 import RightPanel from "@/components/RightPanel";
 import { fetchUsers } from "@/util/userActions";
 import { Suspense } from "react";
-interface Users{
-  id: string,
-  email: string,
-  name: string,
-  password:string,
-
+interface Users {
+  id: string;
+  email: string;
+  name: string;
+  password: string;
 }
 export default async function Home() {
-  const {data} =await fetchUsers();
+  const { data } = await fetchUsers();
   return (
     <>
       <div className="h-[92vh] w-full bg-blue-100 flex justify-between ">
